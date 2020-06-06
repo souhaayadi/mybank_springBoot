@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 public class CompteCourant extends Compte{
 	private double decouvert;
 
-	
+
 
 	public CompteCourant() {
 		super();
@@ -28,6 +28,6 @@ public class CompteCourant extends Compte{
 	public void setDecouvert(double decouvert) {
 		this.decouvert = decouvert;
 	}
-	
+
 
 }

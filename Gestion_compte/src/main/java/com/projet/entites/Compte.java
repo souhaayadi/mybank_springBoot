@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name ="TypeCompte",discriminatorType = DiscriminatorType.STRING,length =2)
 public abstract class Compte implements Serializable{
-	@Id 
+	@Id
 	private String codeCompte;
 	private Date dateCreation;
 	private double solde;
@@ -31,8 +31,8 @@ public abstract class Compte implements Serializable{
 	@OneToMany(mappedBy ="compte",fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Collection<Operation> operations;
-	
-	
+
+
 	public Compte() {
 		super();
 	}
@@ -96,6 +96,6 @@ public abstract class Compte implements Serializable{
 		this.operations = operations;
 	}
 
-	
+
 
 }

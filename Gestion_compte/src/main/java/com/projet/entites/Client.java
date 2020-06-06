@@ -4,19 +4,20 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * @author ci
  *
  */
+
 @Entity
 public class Client implements Serializable{
+
+
 @Id
 @GeneratedValue
 private Long code;
@@ -24,7 +25,12 @@ private String nom;
 private String prenom;
 private Date dateNaiss;
 private String email;
-private String adresss;
+private String comment;
+@OneToOne()
+@JsonIgnore
+private Adresse address;
+
+private String sexe;
 
 @OneToMany(mappedBy ="client",fetch = FetchType.LAZY)
 @JsonIgnore
@@ -42,13 +48,15 @@ public Client() {
 
 
 
-public Client(String nom, String prenom, Date dateNaiss, String email, String adresss) {
+public Client(String nom, String prenom, Date dateNaiss, String email,String sexe,Adresse adress ,String comment ) {
 	super();
 	this.nom = nom;
 	this.prenom = prenom;
 	this.dateNaiss = dateNaiss;
 	this.email = email;
-	this.adresss = adresss;
+	this.sexe=sexe;
+	this.address=adress;
+	this.comment=comment;
 }
 
 
@@ -134,20 +142,25 @@ public void setDateNaiss(Date dateNaiss) {
 
 
 
-public String getAdresss() {
-	return adresss;
-}
+
+
+
+	public String getSexe() {
+		return sexe;
+	}
+
+	public void setSexe(String sexe) {
+		this.sexe = sexe;
+	}
 
 
 
 
+	public Adresse getAddress() {
+		return address;
+	}
 
-
-
-
-public void setAdresss(String adresss) {
-	this.adresss = adresss;
-}
-
-
+	public void setAddress(Adresse address) {
+		this.address = address;
+	}
 }

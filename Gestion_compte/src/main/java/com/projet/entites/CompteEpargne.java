@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 public class CompteEpargne extends Compte {
 	private double taux ;
 
-	
+
 
 	public CompteEpargne() {
 		super();
@@ -27,6 +27,6 @@ public class CompteEpargne extends Compte {
 	public void setTaux(double taux) {
 		this.taux = taux;
 	}
-	
+
 
 }
