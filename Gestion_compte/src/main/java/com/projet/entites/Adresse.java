@@ -9,11 +9,12 @@ import java.io.Serializable;
 public class Adresse implements Serializable {
     @Id
     @GeneratedValue
+    private String code_adresse;
     private String postalCode;
     private String country;
     private String city;
     private String principalAdress;
-    private String code_adresse;
+
     public Adresse() {
     }
 

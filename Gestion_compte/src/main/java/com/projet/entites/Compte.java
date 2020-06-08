@@ -4,29 +4,22 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name ="TypeCompte",discriminatorType = DiscriminatorType.STRING,length =2)
+//@DiscriminatorColumn(name ="TypeCompte",discriminatorType = DiscriminatorType.STRING,length =2)
 public abstract class Compte implements Serializable{
 	@Id
+	@GeneratedValue
 	private String codeCompte;
 	private Date dateCreation;
 	private double solde;
+	private String typeCpt;
 	@ManyToOne
-	@JoinColumn(name="CODE_CLIENT")
+	@JsonIgnore
 	private Client client;
 	@OneToMany(mappedBy ="compte",fetch = FetchType.LAZY)
 	@JsonIgnore
@@ -38,12 +31,13 @@ public abstract class Compte implements Serializable{
 	}
 
 
-	public Compte(String codeCompte, Date dateCreation, double solde, Client client) {
+	public Compte(String codeCompte, Date dateCreation, double solde, Client client,String typeCpt) {
 		super();
 		this.codeCompte = codeCompte;
 		this.dateCreation = dateCreation;
 		this.solde = solde;
 		this.client = client;
+		this.typeCpt=typeCpt;
 	}
 
 
@@ -96,6 +90,11 @@ public abstract class Compte implements Serializable{
 		this.operations = operations;
 	}
 
+	public String getTypeCpt() {
+		return typeCpt;
+	}
 
-
+	public void setTypeCpt(String typeCpt) {
+		this.typeCpt = typeCpt;
+	}
 }

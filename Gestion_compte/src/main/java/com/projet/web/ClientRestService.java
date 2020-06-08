@@ -2,19 +2,15 @@ package com.projet.web;
 
 import java.util.List;
 
+import com.projet.service.clientService.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.projet.dao.ClientRepository;
 import com.projet.entites.Client;
@@ -25,6 +21,8 @@ import com.projet.entites.Operation;
 public class ClientRestService {
 	@Autowired
 	private ClientRepository clientRepository;
+	@Autowired
+	private ClientService clientService;
 
 	@GetMapping("/clients")
 	public List<Client> getAllClient(){
@@ -41,9 +39,10 @@ public class ClientRestService {
 	}
 
 	@PostMapping("/clients")
-	public Client addClient(@RequestBody Client cl) {
-
-		return clientRepository.save(cl);
+	public HttpEntity<Client> addClient(@RequestBody Client cl) {
+         Client result;
+         result= clientService.createClient(cl);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 

@@ -3,6 +3,7 @@ package com.projet.entites;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -29,12 +30,10 @@ private String comment;
 @OneToOne()
 @JsonIgnore
 private Adresse address;
-
 private String sexe;
-
 @OneToMany(mappedBy ="client",fetch = FetchType.LAZY)
 @JsonIgnore
-private Collection<Compte> comptes;
+private List<Compte> comptes;
 
 
 public Client() {
@@ -84,10 +83,10 @@ public String getEmail() {
 public void setEmail(String email) {
 	this.email = email;
 }
-public Collection<Compte> getComptes() {
+public List<Compte> getComptes() {
 	return comptes;
 }
-public void setComptes(Collection<Compte> comptes) {
+public void setComptes(List<Compte> comptes) {
 	this.comptes = comptes;
 }
 
@@ -162,5 +161,13 @@ public void setDateNaiss(Date dateNaiss) {
 
 	public void setAddress(Adresse address) {
 		this.address = address;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }
