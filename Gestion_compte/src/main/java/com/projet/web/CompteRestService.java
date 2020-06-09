@@ -92,19 +92,19 @@ public class CompteRestService {
 	}
 
 	@PutMapping("/comptes/addCpCourant/{codeClient}&{codeCompte}&{solde}&{decouvert}")
-	public void addComptecourant(@PathVariable Long codeClient,@PathVariable String codeCompte ,@PathVariable double solde,@PathVariable double decouvert,@PathVariable String typeCpt) {
+	public void addComptecourant(@PathVariable Long codeClient,@PathVariable int codeCompte ,@PathVariable double solde,@PathVariable double decouvert,@PathVariable String typeCpt) {
 		Client c=clientRepository.findById(codeClient).orElse(null);
 		//if(typeCompte == "CC")	
-		CompteCourant cc =  new CompteCourant(codeCompte,new Date(),solde,c,decouvert,typeCpt);
+		CompteCourant cc =  new CompteCourant(codeCompte,new Date(),solde,decouvert,typeCpt);
 		compteRepository.save(cc);
 
 	}
 
 	@PutMapping("/comptes/addCpEpargne/{codeClient}&{codeCompte}&{solde}&{taux}")
-	public void addCompteEpargne(@PathVariable Long codeClient,@PathVariable String codeCompte ,@PathVariable double solde,@PathVariable double taux,@PathVariable String typeCpt) {
+	public void addCompteEpargne(@PathVariable Long codeClient,@PathVariable int codeCompte ,@PathVariable double solde,@PathVariable double taux,@PathVariable String typeCpt) {
 		Client c=clientRepository.findById(codeClient).orElse(null);
 		//if(typeCompte == "CC")	
-		CompteEpargne ce=new CompteEpargne(codeCompte,new Date(),solde,c,taux,typeCpt);
+		CompteEpargne ce=new CompteEpargne(codeCompte,new Date(),solde,taux,typeCpt);
 		compteRepository.save(ce);
 	}
 

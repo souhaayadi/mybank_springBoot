@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Adresse implements Serializable {
     @Id
     @GeneratedValue
-    private String code_adresse;
+    private Long code_adresse;
     private String postalCode;
     private String country;
     private String city;
@@ -18,11 +18,11 @@ public class Adresse implements Serializable {
     public Adresse() {
     }
 
-    public String getCode_adresse() {
+    public Long getCode_adresse() {
         return code_adresse;
     }
 
-    public void setCode_adresse(String code_adresse) {
+    public void setCode_adresse(Long code_adresse) {
         this.code_adresse = code_adresse;
     }
 

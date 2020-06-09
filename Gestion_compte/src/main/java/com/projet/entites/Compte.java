@@ -7,49 +7,49 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name ="TypeCompte",discriminatorType = DiscriminatorType.STRING,length =2)
-public abstract class Compte implements Serializable{
+public  class Compte implements Serializable{
 	@Id
-	@GeneratedValue
-	private String codeCompte;
+	private int codeCompte;
 	private Date dateCreation;
 	private double solde;
 	private String typeCpt;
-	@ManyToOne
+
+	/*@ManyToOne()
 	@JsonIgnore
-	private Client client;
+	private Client client;*/
 	@OneToMany(mappedBy ="compte",fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Collection<Operation> operations;
 
 
 	public Compte() {
-		super();
 	}
 
 
-	public Compte(String codeCompte, Date dateCreation, double solde, Client client,String typeCpt) {
+	public Compte(int codeCompte, Date dateCreation, double solde,String typeCpt) {
 		super();
 		this.codeCompte = codeCompte;
 		this.dateCreation = dateCreation;
 		this.solde = solde;
-		this.client = client;
+
 		this.typeCpt=typeCpt;
 	}
 
 
-	public String getCodeCompte() {
+	public int getCodeCompte() {
 		return codeCompte;
 	}
 
-
-	public void setCodeCompte(String codeCompte) {
+	public void setCodeCompte(int codeCompte) {
 		this.codeCompte = codeCompte;
 	}
-
 
 	public Date getDateCreation() {
 		return dateCreation;
@@ -71,14 +71,14 @@ public abstract class Compte implements Serializable{
 	}
 
 
-	public Client getClient() {
+/*	public Client getClient() {
 		return client;
 	}
 
 
 	public void setClient(Client client) {
 		this.client = client;
-	}
+	}*/
 
 
 	public Collection<Operation> getOperations() {

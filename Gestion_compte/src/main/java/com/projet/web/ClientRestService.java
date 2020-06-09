@@ -41,7 +41,7 @@ public class ClientRestService {
 	@PostMapping("/clients")
 	public HttpEntity<Client> addClient(@RequestBody Client cl) {
          Client result;
-         result= clientService.createClient(cl);
+         result= clientRepository.save(cl);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

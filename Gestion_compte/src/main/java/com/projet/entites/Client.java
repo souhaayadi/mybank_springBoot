@@ -1,6 +1,7 @@
 package com.projet.entites;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 
 @Entity
+
 public class Client implements Serializable{
 
 
@@ -27,27 +30,22 @@ private String prenom;
 private Date dateNaiss;
 private String email;
 private String comment;
-@OneToOne()
-@JsonIgnore
+@OneToOne(targetEntity = Adresse.class,cascade = CascadeType.ALL)
+@JoinColumn(name="adr_client",referencedColumnName ="code_adresse")
 private Adresse address;
 private String sexe;
-@OneToMany(mappedBy ="client",fetch = FetchType.LAZY)
-@JsonIgnore
-private List<Compte> comptes;
+@OneToMany(targetEntity = Compte.class,cascade = CascadeType.ALL)
+@JoinColumn(name="cpt_clt",referencedColumnName ="code")
+private List<Compte> comptes=new ArrayList<>();
 
 
 public Client() {
-	super();
+
 }
 
 
 
-
-
-
-
-
-public Client(String nom, String prenom, Date dateNaiss, String email,String sexe,Adresse adress ,String comment ) {
+public Client(String nom, String prenom, Date dateNaiss, String email,String sexe,Adresse adress ,String comment) {
 	super();
 	this.nom = nom;
 	this.prenom = prenom;
@@ -56,6 +54,8 @@ public Client(String nom, String prenom, Date dateNaiss, String email,String sex
 	this.sexe=sexe;
 	this.address=adress;
 	this.comment=comment;
+
+
 }
 
 
