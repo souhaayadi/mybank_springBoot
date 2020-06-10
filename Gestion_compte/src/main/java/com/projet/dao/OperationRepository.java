@@ -11,6 +11,6 @@ import com.projet.entites.Operation;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 	@Query("select o.class , o from Operation o where o.compte.codeCompte = :x order by o.dateOpertion desc")
-	public Page<Operation> listOperation(@Param("x") String codeCompte,Pageable pageable);
+	public Page<Operation> listOperation(@Param("x") int codeCompte,Pageable pageable);
 
 }

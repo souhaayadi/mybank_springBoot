@@ -14,8 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TypeOperation",discriminatorType = DiscriminatorType.STRING,length =1)
-public abstract class Operation implements Serializable {
+@DiscriminatorColumn(name = "TypeOperation",discriminatorType = DiscriminatorType.STRING,length =3)
+public  class Operation implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long numero;

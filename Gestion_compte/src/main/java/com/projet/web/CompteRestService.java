@@ -1,18 +1,16 @@
 package com.projet.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.projet.dao.ClientRepository;
 import com.projet.dao.CompteRepository;
@@ -37,57 +35,69 @@ public class CompteRestService {
 	@Autowired
 	private OperationRepository operationRepository;
 
-
-
-
 	@GetMapping("/comptes")
 	public List<Compte> getAllCompte(){
 		return compteRepository.findAll();
 	}
 
-
-	@GetMapping("/comptes/{codeCompte}")
-	public Compte consulterCompte(@PathVariable String codeCompte) {
-		Compte cp=compteRepository.findById(codeCompte).orElse(null);
-		if(cp==null) throw new RuntimeException("Compte introuvable");
+	public Compte consulterCompte(String codeCompte) {
+		Compte cp = compteRepository.findByCodeCompte(Integer.parseInt(codeCompte));
+		if (cp == null) throw new RuntimeException("Compte introuvable");
 		return cp;
 	}
 
 	@PutMapping("/comptes/verser/{codeCompte}&{montant}")
-	public void verser(@PathVariable  String codeCompte, @PathVariable double montant) {
+	public HttpEntity<Compte> verser(@PathVariable  String codeCompte, @PathVariable double montant) {
+		Compte result;
 		Compte cp=consulterCompte(codeCompte);
 		cp.setSolde(cp.getSolde()+montant);
 		Versement v =new Versement(new Date(), montant, cp);
 		operationRepository.save(v);
+		result= consulterCompte(codeCompte);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
 	}
 
 	@PutMapping("/comptes/retirer/{codeCompte}&{montant}")
-	public void retirer(@PathVariable  String codeCompte, @PathVariable double montant) {
+	public HttpEntity<Compte> retirer(@PathVariable  String codeCompte, @PathVariable double montant) {
+		Compte result;
 		Compte cp=consulterCompte(codeCompte);
 		double faciliteCaisse=0;
 		if(cp instanceof CompteCourant)
 			faciliteCaisse=((CompteCourant) cp).getDecouvert();
-		if(cp.getSolde()+faciliteCaisse < montant)throw new RuntimeException("Solde insuffisant");
+		if(cp.getSolde()+faciliteCaisse < montant){
+			throw new RuntimeException("Solde insuffisant");
+
+		}
 		else {
 			cp.setSolde(cp.getSolde()-montant);
 			Retrait v =new Retrait(new Date(), montant, cp);
 			operationRepository.save(v);
+			result= consulterCompte(codeCompte);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 	}
 
 	@PutMapping("/comptes/virement/{codeCompte1}&{codeCompte2}&{montant}")
-	public void virement(@PathVariable String codeCompte1, @PathVariable String codeCompte2, @PathVariable double montant)
+	public HttpEntity<List<Compte>> virement(@PathVariable String codeCompte1, @PathVariable String codeCompte2, @PathVariable double montant)
 	{
+		List<Compte> result = new ArrayList<>();
 		retirer(codeCompte1, montant);
 		verser(codeCompte2, montant);
+		Compte compte1= consulterCompte(codeCompte1);
+		Compte compte2= consulterCompte(codeCompte2);
+		result.add(compte1);
+		result.add(compte2);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/comptes/listOperation")
-	public Page<Operation> listOperation(@RequestParam(name = "codeCompte") String codeCompte,
+	public List<Operation> listOperation(@RequestParam(name = "codeCompte") String codeCompte,
 										 @RequestParam (name = "page", defaultValue ="0") int page,
 										 @RequestParam (name = "size", defaultValue = "5") int size) {
-
-		return operationRepository.listOperation(codeCompte, PageRequest.of(page, size));
+        List<Operation> operation= new ArrayList<>();
+		operation= operationRepository.listOperation(Integer.parseInt(codeCompte), PageRequest.of(page, size)).getContent();
+		return operation;
 
 	}
 
@@ -107,7 +117,19 @@ public class CompteRestService {
 		CompteEpargne ce=new CompteEpargne(codeCompte,new Date(),solde,taux,typeCpt);
 		compteRepository.save(ce);
 	}
+	@DeleteMapping("/comptes/{codeCompte}")
+	public HttpEntity<Boolean> deleteAccount(@PathVariable int codeCompte) {
+		Boolean result;
+		try{
+			compteRepository.deleteById(Integer.toString(codeCompte));
+			result=true;
+		}
+		catch (Exception e){
+			result=false;
+		}
 
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 
 }

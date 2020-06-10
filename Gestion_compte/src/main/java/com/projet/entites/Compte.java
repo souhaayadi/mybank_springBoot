@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-//@DiscriminatorColumn(name ="TypeCompte",discriminatorType = DiscriminatorType.STRING,length =2)
 public  class Compte implements Serializable{
 	@Id
 	private int codeCompte;
@@ -21,9 +20,6 @@ public  class Compte implements Serializable{
 	private double solde;
 	private String typeCpt;
 
-	/*@ManyToOne()
-	@JsonIgnore
-	private Client client;*/
 	@OneToMany(mappedBy ="compte",fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Collection<Operation> operations;

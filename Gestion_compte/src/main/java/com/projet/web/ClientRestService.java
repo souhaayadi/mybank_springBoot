@@ -29,15 +29,12 @@ public class ClientRestService {
 		return clientRepository.findAll();
 	}
 
-
-
 	@GetMapping("/clients/{codeClient}")
 	public Client consulterClient(@PathVariable Long codeClient) {
 
 		return clientRepository.findById(codeClient).orElse(null);
 
 	}
-
 	@PostMapping("/clients")
 	public HttpEntity<Client> addClient(@RequestBody Client cl) {
          Client result;
@@ -45,27 +42,30 @@ public class ClientRestService {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-
 	@DeleteMapping("/clients/{codeClient}")
-	public Boolean supprimerClient(@PathVariable Long codeClient) {
-		clientRepository.deleteById(codeClient);
-		return true;
+	public HttpEntity<Boolean> supprimerClient(@PathVariable Long codeClient) {
+		Boolean result;
+		try{
+			 clientRepository.deleteById(codeClient);
+			result=true;
+		}
+		catch (Exception e){
+			result=false;
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
-
 	@PutMapping("/clients/{codeClient}")
 	public Client updateClient(@PathVariable Long codeClient, @RequestBody Client cl) {
 		cl.setCode(codeClient);
 		return  clientRepository.save(cl);
 
 	}
-
 	@GetMapping("clients/listClient")
 	public Page<Client> listClient(@RequestParam(name = "mc", defaultValue = "") String mc,
 								   @RequestParam (name = "page", defaultValue ="0") int page,
 								   @RequestParam (name = "size", defaultValue = "5") int size) {
 		return clientRepository.listClient("%"+mc+"%",  PageRequest.of(page, size));
-
 	}
 }
 	
