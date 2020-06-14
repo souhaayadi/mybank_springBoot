@@ -14,6 +14,7 @@ public class Adresse implements Serializable {
     private String country;
     private String city;
     private String principalAdress;
+    private String phoneNumber;
 
     public Adresse() {
     }
@@ -56,5 +57,13 @@ public class Adresse implements Serializable {
 
     public void setPrincipalAdress(String principalAdress) {
         this.principalAdress = principalAdress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
